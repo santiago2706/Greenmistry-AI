@@ -1,0 +1,1 @@
+import{j as i}from"./index-BnjPC3ra.js";function t(){return i.jsxs("div",{className:"optimization-view",children:[i.jsx("h1",{children:"Motor de Optimización"}),i.jsx("p",{children:"Sistema de recomendación determinístico para mejora de procesos."})]})}export{t as default};

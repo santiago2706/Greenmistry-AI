@@ -1,0 +1,104 @@
+/* ========================================
+   LOADER COMPONENT STYLES
+   ======================================== */
+
+.loader {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sizes */
+.sm {
+    width: 16px;
+    height: 16px;
+}
+
+.md {
+    width: 24px;
+    height: 24px;
+}
+
+.lg {
+    width: 40px;
+    height: 40px;
+}
+
+/* Spinner Variant */
+.spinner {
+    border: 2px solid var(--color-border-primary);
+    border-top-color: var(--color-primary-500);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.spinner.sm {
+    border-width: 2px;
+}
+
+.spinner.lg {
+    border-width: 3px;
+}
+
+/* Dots Variant */
+.dots {
+    gap: var(--spacing-1);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary-500);
+    border-radius: 50%;
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+.dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Pulse Variant */
+.pulse {
+    background: var(--color-primary-500);
+    border-radius: 50%;
+    animation: pulseGrow 1.2s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    80%,
+    100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+
+    40% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulseGrow {
+
+    0%,
+    100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

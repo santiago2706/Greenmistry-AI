@@ -1,0 +1,43 @@
+/* ========================================
+   COLOR TOKENS - GREEN CHEMISTRY PALETTE
+   ======================================== */
+
+:root {
+    /* Regulatory Status Colors */
+    --color-status-compliant: #10b981;
+    --color-status-warning: #f59e0b;
+    --color-status-critical: #ef4444;
+    --color-status-unknown: #6b7280;
+
+    /* Green Chemistry Specific */
+    --color-green-score-excellent: #10b981;
+    --color-green-score-good: #34d399;
+    --color-green-score-moderate: #fbbf24;
+    --color-green-score-poor: #f97316;
+    --color-green-score-critical: #ef4444;
+
+    /* SVHC Indicator */
+    --color-svhc-free: #10b981;
+    --color-svhc-present: #ef4444;
+    --color-svhc-trace: #f59e0b;
+
+    /* Toxicity Levels */
+    --color-toxicity-low: #10b981;
+    --color-toxicity-medium: #f59e0b;
+    --color-toxicity-high: #ef4444;
+
+    /* Chemical Categories */
+    --color-chemical-solvent: #3b82f6;
+    --color-chemical-catalyst: #8b5cf6;
+    --color-chemical-reagent: #06b6d4;
+    --color-chemical-product: #10b981;
+    --color-chemical-waste: #ef4444;
+
+    /* Chart Colors */
+    --chart-color-1: #10b981;
+    --chart-color-2: #3b82f6;
+    --chart-color-3: #8b5cf6;
+    --chart-color-4: #f59e0b;
+    --chart-color-5: #ef4444;
+    --chart-color-6: #06b6d4;
+}

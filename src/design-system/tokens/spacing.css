@@ -1,0 +1,30 @@
+/* ========================================
+   SPACING TOKENS
+   ======================================== */
+
+:root {
+    /* Component Spacing */
+    --space-component-xs: 0.25rem;
+    --space-component-sm: 0.5rem;
+    --space-component-md: 1rem;
+    --space-component-lg: 1.5rem;
+    --space-component-xl: 2rem;
+
+    /* Section Spacing */
+    --space-section-sm: 2rem;
+    --space-section-md: 3rem;
+    --space-section-lg: 4rem;
+    --space-section-xl: 6rem;
+
+    /* Card Padding */
+    --card-padding-sm: 1rem;
+    --card-padding-md: 1.5rem;
+    --card-padding-lg: 2rem;
+
+    /* Gap Tokens */
+    --gap-xs: 0.25rem;
+    --gap-sm: 0.5rem;
+    --gap-md: 1rem;
+    --gap-lg: 1.5rem;
+    --gap-xl: 2rem;
+}

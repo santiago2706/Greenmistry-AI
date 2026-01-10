@@ -1,0 +1,26 @@
+/* ========================================
+   DESIGN SYSTEM - ANIMATION TOKENS
+   ======================================== */
+
+:root {
+    /* Durations - Enterprise standard (150-300ms) */
+    --duration-instant: 50ms;
+    --duration-fast: 150ms;
+    --duration-normal: 200ms;
+    --duration-slow: 300ms;
+    --duration-slower: 400ms;
+
+    /* Easing Functions */
+    --ease-linear: linear;
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    /* Motion Presets */
+    --motion-fade: opacity var(--duration-fast) var(--ease-out);
+    --motion-scale: transform var(--duration-fast) var(--ease-out);
+    --motion-slide: transform var(--duration-normal) var(--ease-out);
+    --motion-all: all var(--duration-normal) var(--ease-out);
+}

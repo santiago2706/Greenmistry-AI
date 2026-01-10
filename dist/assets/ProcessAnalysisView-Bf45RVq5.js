@@ -1,0 +1,1 @@
+import{j as s}from"./index-BnjPC3ra.js";function i(){return s.jsxs("div",{className:"process-analysis-view",children:[s.jsx("h1",{children:"Análisis de Procesos"}),s.jsx("p",{children:"Módulo para análisis detallado de procesos químicos industriales."})]})}export{i as default};

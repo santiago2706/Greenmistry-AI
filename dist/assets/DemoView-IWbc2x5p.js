@@ -1,0 +1,1 @@
+import{j as o}from"./index-BnjPC3ra.js";function i(){return o.jsxs("div",{className:"demo-view",children:[o.jsx("h1",{children:"Modo Demo Ejecutivo"}),o.jsx("p",{children:"Flujo guiado para demostraciones en vivo con datos preconfigurados."})]})}export{i as default};

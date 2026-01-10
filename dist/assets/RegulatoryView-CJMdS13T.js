@@ -1,0 +1,1 @@
+import{j as e}from"./index-BnjPC3ra.js";function o(){return e.jsxs("div",{className:"regulatory-view",children:[e.jsx("h1",{children:"Cumplimiento Regulatorio"}),e.jsx("p",{children:"Módulo para análisis de conformidad con REACH, SVHC y regulaciones locales."})]})}export{o as default};
