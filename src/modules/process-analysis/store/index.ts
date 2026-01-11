@@ -1,4 +1,4 @@
 /**
  * Process Analysis Module - Store Placeholder
  */
-// export { useProcessStore } from './useProcessStore';
+export { useProcessStore } from './processStore';

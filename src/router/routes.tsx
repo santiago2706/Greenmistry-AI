@@ -10,8 +10,10 @@ import { Loader } from '@design-system/components';
 // Lazy load modules for code splitting
 const Dashboard = lazy(() => import('@modules/dashboard/views/DashboardView'));
 const ProcessAnalysis = lazy(() => import('@modules/process-analysis/views/ProcessAnalysisView'));
+const ProcessOverview = lazy(() => import('@modules/process-analysis/views/ProcessOverviewView'));
+const EnvironmentalReport = lazy(() => import('@modules/environmental-report/views/EnvironmentalImpactView'));
 const OptimizationEngine = lazy(() => import('@modules/optimization-engine/views/OptimizationView'));
-const Regulatory = lazy(() => import('@modules/regulatory/views/RegulatoryView'));
+const Regulatory = lazy(() => import('@modules/regulatory/views/RegulatoryComplianceView'));
 const DemoMode = lazy(() => import('@modules/demo-mode/views/DemoView'));
 
 // Loading fallback
@@ -30,8 +32,12 @@ export function AppRoutes() {
                 <Route path="/dashboard" element={<Dashboard />} />
 
                 {/* Process Analysis */}
+                <Route path="/process-overview" element={<ProcessOverview />} />
                 <Route path="/processes" element={<ProcessAnalysis />} />
                 <Route path="/processes/:id" element={<ProcessAnalysis />} />
+
+                {/* Environmental Report */}
+                <Route path="/environmental-report" element={<EnvironmentalReport />} />
 
                 {/* Optimization Engine */}
                 <Route path="/optimization" element={<OptimizationEngine />} />

@@ -4,9 +4,13 @@
 
 @import './variables.css';
 @import './animations.css';
-@import '../design-system/tokens/index.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Reset & Base */
+
 *,
 *::before,
 *::after {

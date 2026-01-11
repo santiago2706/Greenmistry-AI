@@ -1,8 +1,6 @@
-/**
- * Dashboard Module - Components Placeholder
- */
-
-// Export dashboard-specific components here
-// export { ScoreCard } from './ScoreCard';
-// export { AlertsPanel } from './AlertsPanel';
-// export { ProcessList } from './ProcessList';
+export { ScoreDisplay } from './ScoreDisplay/ScoreDisplay';
+export { IndustrySelector } from './IndustrySelector/IndustrySelector';
+export { RegulatoryRisk } from './RegulatoryRisk/RegulatoryRisk';
+export { ProcessStatus } from './ProcessStatus/ProcessStatus';
+export { ActionButtons } from './ActionButtons/ActionButtons';
+export { DashboardHeader } from './DashboardHeader/DashboardHeader';
