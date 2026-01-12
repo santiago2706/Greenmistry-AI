@@ -92,7 +92,7 @@ function DashboardView() {
                     <ActionButtons />
                     <button
                         onClick={() => setIsExportOpen(true)}
-                        className="w-full py-4 border border-white/5 hover:border-emerald-500/30 bg-slate-900/40 rounded-2xl text-xs font-black uppercase tracking-[0.2em] text-slate-500 hover:text-emerald-400 transition-all flex items-center justify-center gap-3"
+                        className="w-full py-4 border border-white/5 hover:border-emerald-500/30 bg-slate-600/40 rounded-2xl text-xs font-black uppercase tracking-[0.2em] text-slate-200 hover:text-emerald-400 transition-all flex items-center justify-center gap-3"
                     >
                         Descargar Documentación Técnica de Simulación
                     </button>

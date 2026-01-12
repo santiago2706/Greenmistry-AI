@@ -67,7 +67,7 @@ export const RegulatoryRisk: React.FC<RegulatoryRiskProps> = ({ level }) => {
 
             <div className="space-y-6 relative z-10">
                 <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-500 uppercase font-bold">Estado</span>
+                    <span className="text-xs text-slate-300 uppercase font-bold">Estado</span>
                     <AnimatePresence mode="wait">
                         <motion.span
                             key={level}
@@ -95,7 +95,7 @@ export const RegulatoryRisk: React.FC<RegulatoryRiskProps> = ({ level }) => {
                     ))}
                 </div>
 
-                <p className="text-[11px] text-slate-500 leading-relaxed font-mono italic">
+                <p className="text-[11px] text-slate-400 leading-relaxed font-mono italic">
                     Vector analysis: {level === 'red' ? 'Restricción REACH Anexo XVII detectada.' : level === 'yellow' ? 'Evaluación EPA en progreso.' : 'Certificación EU Green Deal conforme.'}
                 </p>
             </div>

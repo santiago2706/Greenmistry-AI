@@ -19,7 +19,8 @@ export const ProcessStatus: React.FC<ProcessStatusProps> = ({ score }) => {
     const energy = getStatus(score - 10);
 
     return (
-        <div className="backdrop-blur-xl bg-[#111827]/60 border border-white/5 rounded-xl p-6 shadow-xl relative overflow-hidden">
+        <div className="backdrop-blur-xl bg-[#1e293b]/30 border border-[#94a3b8]/50 rounded-xl p-6 shadow-xl relative overflow-hidden">
+
             <div className="absolute top-0 right-0 p-4 opacity-5">
                 <BarChart className="w-24 h-24 text-white" />
             </div>

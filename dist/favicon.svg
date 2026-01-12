@@ -1,12 +1,181 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <defs>
-    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
-    </linearGradient>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 200 200"
+   version="1.1"
+   id="svg16"
+   sodipodi:docname="Nuevo Text Document.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   width="200"
+   height="200"
+   inkscape:export-filename="Nuevo Text Document.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview16"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="4.5475"
+     inkscape:cx="66.959868"
+     inkscape:cy="59.923035"
+     inkscape:window-width="1920"
+     inkscape:window-height="1111"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g11"
+     showguides="true">
+    <inkscape:page
+       x="0"
+       y="0"
+       width="200"
+       height="200"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .text-gray { fill: #E0E6ED; font-family: 'Arial', sans-serif; font-weight: bold; }
+      .text-blue { fill: #A4C2E3; font-family: 'Arial', sans-serif; font-weight: bold; }
+      .flask-stroke { fill: none; stroke: #A4C2E3; stroke-width: 6; stroke-linecap: round; }
+      .network-node { fill: #FAD689; }
+      .network-line { stroke: #FAD689; stroke-width: 2.5; }
+      .leaf-green { fill: #A8D8B9; }
+    </style>
   </defs>
-  <circle cx="50" cy="50" r="45" fill="url(#grad)"/>
-  <path d="M50 20 L50 50 L70 70" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <circle cx="50" cy="50" r="6" fill="white"/>
-  <path d="M30 65 Q50 45 70 65" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <g
+     id="g16"
+     transform="translate(0.31098704,1.8659222)">
+    <g
+       transform="translate(18.884867,20.706587)"
+       id="g15">
+      <g
+         transform="translate(22.664651,41.921385)"
+         id="g11">
+        <line
+           x1="47.426693"
+           y1="40.121254"
+           x2="75.371574"
+           y2="54.093693"
+           class="network-line"
+           id="line1" />
+        <line
+           x1="75.371574"
+           y1="54.093693"
+           x2="68.385353"
+           y2="82.038574"
+           class="network-line"
+           id="line2" />
+        <line
+           x1="47.426693"
+           y1="40.121254"
+           x2="33.45425"
+           y2="68.066132"
+           class="network-line"
+           id="line3" />
+        <line
+           x1="33.45425"
+           y1="68.066132"
+           x2="54.41291"
+           y2="96.011017"
+           class="network-line"
+           id="line4" />
+        <line
+           x1="68.385353"
+           y1="82.038574"
+           x2="54.41291"
+           y2="96.011017"
+           class="network-line"
+           id="line5" />
+        <line
+           x1="68.385353"
+           y1="82.038574"
+           x2="89.344009"
+           y2="75.052353"
+           class="network-line"
+           id="line6" />
+        <circle
+           cx="47.426693"
+           cy="40.121254"
+           class="network-node"
+           id="circle6"
+           r="5.5889759"
+           style="stroke-width:1.39724" />
+        <circle
+           cx="75.371574"
+           cy="54.093693"
+           class="network-node"
+           id="circle7"
+           r="5.5889759"
+           style="stroke-width:1.39724" />
+        <circle
+           cx="33.45425"
+           cy="68.066132"
+           class="network-node"
+           id="circle8"
+           r="5.5889759"
+           style="stroke-width:1.39724" />
+        <circle
+           cx="68.385353"
+           cy="82.038574"
+           class="network-node"
+           id="circle9"
+           r="6.9862199"
+           style="stroke-width:1.39724" />
+        <circle
+           cx="54.41291"
+           cy="96.011017"
+           class="network-node"
+           id="circle10"
+           r="5.5889759"
+           style="stroke-width:1.39724" />
+        <circle
+           cx="89.344009"
+           cy="75.052353"
+           class="network-node"
+           id="circle11"
+           r="4.1917319"
+           style="stroke-width:1.39724" />
+        <path
+           d="M 47.426691,40.121255 C 54.856275,26.788532 59.365455,16.829762 59.328998,2.7321129"
+           fill="none"
+           stroke="#fad689"
+           stroke-width="4.19173"
+           id="path11"
+           sodipodi:nodetypes="cc" />
+      </g>
+      <path
+         d="m 63.573687,51.413117 v -13.97244 m 33.533855,13.97244 v -13.97244 m -33.533855,13.97244 v 20.958659 a 41.917319,41.917319 0 1 0 33.533855,0 V 51.413117"
+         class="flask-stroke"
+         id="path12" />
+      <path
+         d="m 57.984711,37.440677 h 11.177952 m 22.355903,0 h 11.177954"
+         class="flask-stroke"
+         stroke-width="6"
+         id="path13" />
+      <path
+         d="m 82.60816,43.424477 c 0,0 23.75315,-41.9173191 -18.164172,-48.9035391 0,0 -6.98622,27.9448791 18.164172,48.9035391 z"
+         class="leaf-green"
+         id="path14"
+         style="stroke-width:1.39724" />
+      <path
+         d="M 71.430208,7.5716115 Q 78.416428,21.544051 82.60816,42.502711"
+         fill="none"
+         stroke="#ffffff"
+         stroke-width="1.39724"
+         opacity="0.5"
+         id="path15" />
+    </g>
+  </g>
 </svg>

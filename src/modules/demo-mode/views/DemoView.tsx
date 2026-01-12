@@ -37,9 +37,9 @@ const ScenarioCard: React.FC<ScenarioCardProps> = ({ title, description, icon: I
                     <Icon className={`w-6 h-6 text-${accentColor}`} />
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-400 transition-all">
+                <h2 className="text-3xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-400 transition-all">
                     {title}
-                </h3>
+                </h2>
 
                 <p className="text-slate-400 text-sm leading-relaxed mb-6">
                     {description}
@@ -47,13 +47,13 @@ const ScenarioCard: React.FC<ScenarioCardProps> = ({ title, description, icon: I
 
                 <div className="flex flex-wrap gap-2 mb-8">
                     {tags.map((tag, idx) => (
-                        <span key={idx} className="px-2 py-1 bg-white/5 rounded text-[10px] text-slate-500 uppercase tracking-wider font-semibold">
+                        <span key={idx} className="px-2 py-1 bg-white/5 rounded text-[10px] text-slate-300 uppercase tracking-wider font-semibold">
                             {tag}
                         </span>
                     ))}
                 </div>
 
-                <div className="flex items-center text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-white transition-colors duration-300">
+                <div className="flex items-center text-xs font-bold uppercase tracking-widest text-slate-300 group-hover:text-white transition-colors duration-300">
                     <PlayCircle className="w-4 h-4 mr-2" />
                     Iniciar Escenario
                     <ChevronRight className="w-4 h-4 ml-auto transform group-hover:translate-x-1 transition-transform" />
@@ -86,7 +86,7 @@ const DemoView: React.FC = () => {
 
                     <button
                         onClick={() => navigate('/dashboard')}
-                        className="text-xs font-bold text-slate-500 hover:text-white transition-colors flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10"
+                        className="text-xs font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10"
                     >
                         Salir del Modo Demo
                     </button>

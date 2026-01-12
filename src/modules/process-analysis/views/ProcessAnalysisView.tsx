@@ -123,12 +123,12 @@ const ProcessAnalysisView: React.FC = () => {
                     </h1>
                     <div className="flex items-center gap-2 mt-1">
                         <span className="text-[10px] bg-cyan-950 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/30 font-black uppercase tracking-widest">Contexto</span>
-                        <p className="text-xs text-slate-400 font-mono italic">{processContext.name}</p>
+                        <p className="text-xs text-slate-300 font-mono italic">{processContext.name}</p>
                     </div>
                 </div>
                 <div className="flex gap-4">
                     <div className="text-right">
-                        <div className="text-[10px] text-slate-600 font-black uppercase tracking-widest">Estado de Diseño</div>
+                        <div className="text-[10px] text-slate-300 font-black uppercase tracking-widest">Estado de Diseño</div>
                         <div className={`text-xs font-bold uppercase ${analysis.status === 'nominal' ? 'text-emerald-400' : analysis.status === 'evaluation' ? 'text-amber-500' : 'text-red-500'}`}>
                             {analysis.status === 'nominal' ? 'Cumplimiento Nominal' : analysis.status === 'evaluation' ? 'Bajo Evaluación' : 'Restricción Detectada'}
                         </div>
@@ -141,8 +141,8 @@ const ProcessAnalysisView: React.FC = () => {
                 <aside className="lg:col-span-3 space-y-4">
                     <div className="bg-[#111827] border border-white/5 rounded-2xl p-6 h-full flex flex-col">
                         <div className="flex items-center justify-between mb-4 px-2">
-                            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Inventario</h3>
-                            <span className="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full font-mono">{chemicalRegistry.length} REGISTROS</span>
+                            <h3 className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Inventario</h3>
+                            <span className="text-[9px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full font-mono">{chemicalRegistry.length} REGISTROS</span>
                         </div>
                         <div className="space-y-2 flex-1 overflow-y-auto pr-2 custom-scrollbar max-h-[65vh]">
                             {chemicalRegistry.map((chem) => (
@@ -160,7 +160,7 @@ const ProcessAnalysisView: React.FC = () => {
                                             <span className={`text-xs font-bold uppercase tracking-tight ${mixture.find(c => c.id === chem.id) ? 'text-cyan-400' : 'text-slate-300'}`}>
                                                 {chem.name}
                                             </span>
-                                            <span className="text-[10px] text-slate-600 uppercase font-mono">{chem.type}</span>
+                                            <span className="text-[10px] text-slate-300 uppercase font-mono">{chem.type}</span>
                                         </div>
                                         {getGHSIcon(chem.ghsClass)}
                                     </div>
@@ -175,7 +175,7 @@ const ProcessAnalysisView: React.FC = () => {
                     <div className="grid grid-cols-1 gap-6">
                         {/* Demo Scenarios */}
                         <div className="bg-[#111827] border border-white/5 rounded-2xl p-6">
-                            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <h3 className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4 flex items-center gap-2">
                                 <Zap className="w-3 h-3 text-amber-500" />
                                 Escenarios de Demo
                             </h3>
@@ -197,11 +197,11 @@ const ProcessAnalysisView: React.FC = () => {
                                     </div>
                                     <div className="md:pr-6">
                                         <div className="text-[10px] font-black text-white uppercase mb-1 tracking-tighter">Auditoría de Cumplimiento</div>
-                                        <div className="text-[9px] text-slate-500 leading-tight">Detección de riesgos REACH/EPA y alertas críticas.</div>
+                                        <div className="text-[9px] text-slate-300 leading-tight">Detección de riesgos REACH/EPA y alertas críticas.</div>
                                     </div>
                                     <div className="mt-3 flex gap-1">
-                                        <span className="text-[8px] bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">LEGAL</span>
-                                        <span className="text-[8px] bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">SAFETY</span>
+                                        <span className="text-[8px] bg-red-500/20 text-red-500 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">LEGAL</span>
+                                        <span className="text-[8px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">SAFETY</span>
                                     </div>
                                 </button>
 
@@ -222,11 +222,11 @@ const ProcessAnalysisView: React.FC = () => {
                                     </div>
                                     <div className="md:pr-6">
                                         <div className="text-[10px] font-black text-white uppercase mb-1 tracking-tighter">Dashboard Ejecutivo</div>
-                                        <div className="text-[9px] text-slate-500 leading-tight">Métricas agregadas y ROI para toma de decisiones.</div>
+                                        <div className="text-[9px] text-slate-300 leading-tight">Métricas agregadas y ROI para toma de decisiones.</div>
                                     </div>
                                     <div className="mt-3 flex gap-1">
                                         <span className="text-[8px] bg-cyan-500/10 text-cyan-500 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">MANAGEMENT</span>
-                                        <span className="text-[8px] bg-slate-800 text-slate-500 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">GREEN KPIS</span>
+                                        <span className="text-[8px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">GREEN KPIS</span>
                                     </div>
                                 </button>
 
@@ -268,7 +268,7 @@ const ProcessAnalysisView: React.FC = () => {
                                     </div>
                                     <div>
                                         <div className="text-[9px] font-black text-white uppercase mb-1 tracking-tighter">Cargar Protocolo Industrial (PDF)</div>
-                                        <div className="text-[10px] text-slate-500 font-medium leading-tight italic">Simular análisis de documento técnico.</div>
+                                        <div className="text-[10px] text-slate-300 font-medium leading-tight italic">Simular análisis de documento técnico.</div>
                                     </div>
                                 </button>
                             </div>
@@ -279,7 +279,7 @@ const ProcessAnalysisView: React.FC = () => {
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500/0 via-cyan-500/50 to-cyan-500/0"></div>
 
                             <div className="flex justify-between items-start mb-6">
-                                <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                                <h3 className="text-xs font-black text-slate-300 uppercase tracking-[0.2em] flex items-center gap-2">
                                     <Activity className="w-4 h-4 text-cyan-500 animate-pulse" />
                                     Matriz de Simulación
                                 </h3>
@@ -294,7 +294,7 @@ const ProcessAnalysisView: React.FC = () => {
                                                 <button
                                                     key={type}
                                                     onClick={() => setProcessType(type)}
-                                                    className={`px-3 py-1 text-[8px] font-black uppercase rounded-full border transition-all ${processType === type ? 'bg-cyan-500 text-black border-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]' : 'bg-black/40 text-slate-400 border-white/10 hover:border-white/30'}`}
+                                                    className={`px-3 py-1 text-[8px] font-black uppercase rounded-full border transition-all ${processType === type ? 'bg-cyan-500 text-black border-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]' : 'bg-black/40 text-slate-300 border-white/10 hover:border-white/30'}`}
                                                 >
                                                     {type}
                                                 </button>
@@ -386,7 +386,7 @@ const ProcessAnalysisView: React.FC = () => {
                                     <div className="flex justify-between items-center">
                                         <label
                                             title="La temperatura afecta la velocidad de reacción y la volatilización de amoníaco. Mantener < 60°C para eficiencia."
-                                            className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 cursor-help group"
+                                            className="text-[10px] font-black text-slate-300 uppercase tracking-widest flex items-center gap-2 cursor-help group"
                                         >
                                             <Flame className="w-3 h-3 text-orange-400 group-hover:scale-125 transition-transform" />
                                             Temperatura (°C)
@@ -407,7 +407,7 @@ const ProcessAnalysisView: React.FC = () => {
                                     <div className="flex justify-between items-center">
                                         <label
                                             title="El pH ideal de 6.2 asegura la máxima solubilidad y estabilidad del granulado final."
-                                            className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 cursor-help group"
+                                            className="text-[10px] font-black text-slate-300 uppercase tracking-widest flex items-center gap-2 cursor-help group"
                                         >
                                             <Droplets className="w-3 h-3 text-cyan-400 group-hover:scale-125 transition-transform" />
                                             Acidez (pH)
@@ -431,7 +431,7 @@ const ProcessAnalysisView: React.FC = () => {
                                     <div className="flex justify-between items-center">
                                         <label
                                             title="La agitación mecánica garantiza la distribución homogénea de los micronutrientes (Zn, Mg)."
-                                            className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 cursor-help group"
+                                            className="text-[10px] font-black text-slate-300 uppercase tracking-widest flex items-center gap-2 cursor-help group"
                                         >
                                             <Wind className="w-3 h-3 text-emerald-400 group-hover:scale-125 transition-transform" />
                                             Agitación (RPM)
@@ -452,12 +452,12 @@ const ProcessAnalysisView: React.FC = () => {
                                     <div className="flex justify-between items-center">
                                         <label
                                             title="Control de presión crítico para la seguridad operativa. Evite exceder los 8 Bar."
-                                            className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2 cursor-help group"
+                                            className="text-[10px] font-black text-slate-300 uppercase tracking-widest flex items-center gap-2 cursor-help group"
                                         >
-                                            <Settings2 className="w-3 h-3 text-slate-400 group-hover:scale-125 transition-transform" />
+                                            <Settings2 className="w-3 h-3 text-slate-300 group-hover:scale-125 transition-transform" />
                                             Presión (Bar)
                                         </label>
-                                        <span className="text-xs font-mono text-slate-400 font-bold">{pressure.toFixed(1)} Bar</span>
+                                        <span className="text-xs font-mono text-slate-300 font-bold">{pressure.toFixed(1)} Bar</span>
                                     </div>
                                     <input
                                         type="range"
@@ -474,7 +474,7 @@ const ProcessAnalysisView: React.FC = () => {
                             <div className="mt-6 pt-6 border-t border-white/5 space-y-4">
                                 <div className="bg-slate-950/50 p-4 rounded-xl border border-white/5">
                                     <div className="flex items-center justify-between mb-2">
-                                        <h4 className="text-[10px] font-black text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                             <Info className="w-3 h-3 italic" />
                                             Justificación Técnica
                                         </h4>
@@ -486,7 +486,7 @@ const ProcessAnalysisView: React.FC = () => {
                                             {showTechnicalDetails ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                                         </button>
                                     </div>
-                                    <p className="text-xs text-slate-400 italic leading-relaxed border-l-2 border-cyan-500/20 pl-4 py-1">
+                                    <p className="text-xs text-slate-300 italic leading-relaxed border-l-2 border-cyan-500/20 pl-4 py-1">
                                         "{analysis.justification}"
                                     </p>
 
@@ -503,7 +503,7 @@ const ProcessAnalysisView: React.FC = () => {
                                                         const gp = GREEN_CHEMISTRY_PRINCIPLES.find(x => x.id === p.principleId);
                                                         return (
                                                             <div key={p.principleId} className="space-y-1">
-                                                                <div className="flex justify-between text-[8px] font-bold uppercase tracking-tighter text-slate-500">
+                                                                <div className="flex justify-between text-[8px] font-bold uppercase tracking-tighter text-slate-300">
                                                                     <span>{gp?.shortName}</span>
                                                                     <span className={p.status === 'compliant' ? 'text-emerald-400' : 'text-red-400'}>{p.value}</span>
                                                                 </div>
@@ -552,7 +552,7 @@ const ProcessAnalysisView: React.FC = () => {
                                         <p className="text-xl text-white font-black">{analysis.metrics.complianceRisk}%</p>
                                     </div>
                                     <div className="pt-2 border-t border-red-500/10">
-                                        <p className="text-[9px] text-slate-500 font-black uppercase tracking-tighter mb-2">Banderas Regulatorias</p>
+                                        <p className="text-[9px] text-slate-300 font-black uppercase tracking-tighter mb-2">Banderas Regulatorias</p>
                                         <div className="space-y-1">
                                             {analysis.regulatoryFlags?.map(flag => (
                                                 <div key={flag.id} className="flex items-center gap-2 text-[10px] text-red-400">
@@ -572,14 +572,14 @@ const ProcessAnalysisView: React.FC = () => {
                                         <p className="text-xl text-white font-black">+{analysis.metrics.estimatedROI?.toFixed(1)}%</p>
                                     </div>
                                     <div className="pt-2 border-t border-emerald-500/10">
-                                        <p className="text-[9px] text-slate-500 font-black uppercase tracking-tighter mb-2">Métricas de Sostenibilidad</p>
+                                        <p className="text-[9px] text-slate-300 font-black uppercase tracking-tighter mb-2">Métricas de Sostenibilidad</p>
                                         <div className="grid grid-cols-2 gap-2">
                                             <div className="bg-slate-900/50 p-2 rounded text-center">
-                                                <span className="block text-[8px] text-slate-500 uppercase">E-Factor</span>
+                                                <span className="block text-[8px] text-slate-300 uppercase">E-Factor</span>
                                                 <span className="text-[10px] text-white font-bold">{analysis.metrics.wasteFactor.toFixed(2)}</span>
                                             </div>
                                             <div className="bg-slate-900/50 p-2 rounded text-center">
-                                                <span className="block text-[8px] text-slate-500 uppercase">Carbono</span>
+                                                <span className="block text-[8px] text-slate-300 uppercase">Carbono</span>
                                                 <span className="text-[10px] text-white font-bold">{analysis.metrics.carbonFootprint.toFixed(1)}</span>
                                             </div>
                                         </div>
@@ -590,7 +590,7 @@ const ProcessAnalysisView: React.FC = () => {
                             {(contextMode === 'standard' || mixture.length > 0) && (
                                 <div className="space-y-4">
                                     <div className="p-3 bg-white/2 border border-white/5 rounded-xl">
-                                        <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-tighter">Diagnóstico Técnico</p>
+                                        <p className="text-[10px] text-slate-300 uppercase font-black mb-2 tracking-tighter">Diagnóstico Técnico</p>
                                         <div className="space-y-2">
                                             {analysis.diagnostics.map((diag, idx) => (
                                                 <div key={idx} className="flex gap-2 items-start text-[11px] text-slate-300 leading-tight">
@@ -611,7 +611,7 @@ const ProcessAnalysisView: React.FC = () => {
                                                             <span className="text-[10px] text-white font-bold">{opt.label}</span>
                                                             <span className="text-[8px] bg-cyan-500/10 text-cyan-400 px-1.5 py-0.5 rounded font-black">+{opt.impact.energy || opt.impact.waste || 0}% Eficacia</span>
                                                         </div>
-                                                        <p className="text-[9px] text-slate-500 leading-tight italic">{opt.description}</p>
+                                                        <p className="text-[9px] text-slate-300 leading-tight italic">{opt.description}</p>
                                                         <button
                                                             onClick={() => {
                                                                 if (opt.id === 'opt-temp') setTemp(55);
@@ -634,7 +634,7 @@ const ProcessAnalysisView: React.FC = () => {
                     </div>
 
                     <div className="bg-[#111827] border border-white/5 rounded-2xl p-6 h-full font-mono">
-                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-8 border-b border-white/5 pb-4">Indicadores Real-Time</h3>
+                        <h3 className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-8 border-b border-white/5 pb-4">Indicadores Real-Time</h3>
 
                         <div className="space-y-10">
                             <div className="text-center">
@@ -646,7 +646,7 @@ const ProcessAnalysisView: React.FC = () => {
 
                             <div className="space-y-6">
                                 <div>
-                                    <div className="flex justify-between text-[9px] uppercase text-slate-500 mb-2">
+                                    <div className="flex justify-between text-[9px] uppercase text-slate-300 mb-2">
                                         <span>C-Footprint</span>
                                         <span>{analysis.metrics.carbonFootprint.toFixed(1)} kg</span>
                                     </div>
@@ -655,7 +655,7 @@ const ProcessAnalysisView: React.FC = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <div className="flex justify-between text-[9px] uppercase text-slate-500 mb-2">
+                                    <div className="flex justify-between text-[9px] uppercase text-slate-300 mb-2">
                                         <span>R-Waste (E)</span>
                                         <span>{analysis.metrics.wasteFactor.toFixed(1)} f</span>
                                     </div>
@@ -701,10 +701,10 @@ const ProcessAnalysisView: React.FC = () => {
                                         <Zap className="w-6 h-6 text-cyan-400" />
                                         Informe de Optimización G.C.C.
                                     </h2>
-                                    <p className="text-[10px] text-slate-500 uppercase font-mono mt-1">Caso: Fertilizante Fosfatado Líquido (MAP/DAP)</p>
+                                    <p className="text-[10px] text-slate-300 uppercase font-mono mt-1">Caso: Fertilizante Fosfatado Líquido (MAP/DAP)</p>
                                 </div>
                                 <button onClick={() => setShowReport(false)} className="p-2 hover:bg-white/5 rounded-full transition-colors">
-                                    <X className="w-6 h-6 text-slate-500" />
+                                    <X className="w-6 h-6 text-slate-300" />
                                 </button>
                             </div>
 
@@ -721,7 +721,7 @@ const ProcessAnalysisView: React.FC = () => {
                                         </div>
                                         <div className="space-y-2">
                                             <div className="text-[9px] text-slate-600 uppercase font-black">Cantidades (Batch 1000kg)</div>
-                                            <ul className="text-[11px] text-slate-400 space-y-1 bg-white/2 pb-4 pt-2">
+                                            <ul className="text-[11px] text-slate-300 space-y-1 bg-white/2 pb-4 pt-2">
                                                 <li>• Ácido Fosfórico (85%): ~550 kg</li>
                                                 <li>• Amoníaco Acuoso: ~145 kg</li>
                                                 <li>• Agua: ~305 kg</li>
@@ -752,7 +752,7 @@ const ProcessAnalysisView: React.FC = () => {
                                 <div className="bg-slate-900/50 rounded-2xl border border-white/5 overflow-hidden">
                                     <table className="w-full text-left text-xs">
                                         <thead>
-                                            <tr className="bg-white/5 uppercase text-[9px] font-black tracking-widest text-slate-500">
+                                            <tr className="bg-white/5 uppercase text-[9px] font-black tracking-widest text-slate-300">
                                                 <th className="p-4">Métrica de Impacto</th>
                                                 <th className="p-4">Tradicional</th>
                                                 <th className="p-4">Green Demo</th>
@@ -787,7 +787,7 @@ const ProcessAnalysisView: React.FC = () => {
                                         <Info className="w-5 h-5 text-cyan-500 shrink-0" />
                                         <div className="space-y-1">
                                             <p className="text-[10px] font-black text-cyan-400 uppercase">Resumen Ejecutivo</p>
-                                            <p className="text-xs text-slate-400 leading-relaxed italic">
+                                            <p className="text-xs text-slate-300 leading-relaxed italic">
                                                 "Al operar a 58°C con un pH controlado de 6.2, el proceso de neutralización es intrínsecamente más seguro (Principio 12) y eficiente (Principio 6). El uso de agua como moderador térmico y la sustitución parcial por nitrato de amonio reduce drásticamente las emisiones de vapores tóxicos, alineando la planta con los más altos estándares ambientales."
                                             </p>
                                         </div>
@@ -819,7 +819,7 @@ const ProcessAnalysisView: React.FC = () => {
 
                     <button
                         onClick={() => navigate('/dashboard')}
-                        className="relative z-10 px-6 py-3 text-xs font-black text-slate-400 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-3 group"
+                        className="relative z-10 px-6 py-3 text-xs font-black text-slate-300 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-3 group"
                     >
                         <ArrowRight className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
                         Cockpit
@@ -828,7 +828,7 @@ const ProcessAnalysisView: React.FC = () => {
                     <div className="flex items-center gap-4 relative z-10">
                         <button
                             onClick={() => clearMixture()}
-                            className="px-6 py-3 border border-slate-700 text-slate-500 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:text-white hover:border-white/20 transition-all"
+                            className="px-6 py-3 border border-slate-700 text-slate-300 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:text-white hover:border-white/20 transition-all"
                         >
                             Reset Bench
                         </button>
