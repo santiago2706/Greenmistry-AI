@@ -64,13 +64,16 @@ const CircularMetric: React.FC<{ value: number; label: string }> = ({ value, lab
 
 const EnvironmentalImpactView: React.FC = () => {
     const navigate = useNavigate();
-    const { activeMixture: mixture, processContext } = useReactionStore();
+    const { activeMixture: mixture, reactionTemp, reactionPH, mixingSpeed, pressure, processType, processContext } = useReactionStore();
     const { notify } = useNotificationStore();
     const [isExporting, setIsExporting] = useState(false);
     const [showTechnical, setShowTechnical] = useState(false);
 
     // Contextual Analysis from central engine
-    const analysis = useMemo(() => analyzeChemistry(mixture), [mixture]);
+    const analysis = useMemo(() =>
+        analyzeChemistry(mixture, reactionTemp, reactionPH, mixingSpeed, pressure, 'standard', processType),
+        [mixture, reactionTemp, reactionPH, mixingSpeed, pressure, processType]
+    );
 
     const handleExport = () => {
         setIsExporting(true);

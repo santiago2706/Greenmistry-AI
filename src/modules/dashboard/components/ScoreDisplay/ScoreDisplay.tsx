@@ -5,9 +5,10 @@ interface ScoreDisplayProps {
     currentScore: number;
     isAnimating: boolean;
     justification?: string;
+    productName?: string;
 }
 
-export const ScoreDisplay: React.FC<ScoreDisplayProps> = ({ currentScore, isAnimating, justification }) => {
+export const ScoreDisplay: React.FC<ScoreDisplayProps> = ({ currentScore, isAnimating, justification, productName }) => {
     const { openInsight } = useContextualInsight();
 
     return (
@@ -20,10 +21,16 @@ export const ScoreDisplay: React.FC<ScoreDisplayProps> = ({ currentScore, isAnim
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-cyan-500/5"></div>
 
             <div className="relative z-10">
-                <h2 className="text-2xl font-bold text-center mb-8 text-white uppercase tracking-tighter">
+                <h2 className="text-2xl font-black text-center mb-1 text-white uppercase tracking-tighter">
                     Score Global de Química Verde
                 </h2>
-
+                {productName && (
+                    <div className="text-center mb-6">
+                        <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20 font-black uppercase tracking-widest shadow-lg shadow-emerald-500/5">
+                            Identidad del Producto: {productName}
+                        </span>
+                    </div>
+                )}
                 <div className="flex justify-center mb-10">
                     <div className="relative">
                         {/* Circular progress ring with motion */}

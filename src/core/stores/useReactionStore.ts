@@ -10,6 +10,8 @@ export interface Chemical {
     physicalState?: 'liquid' | 'solid' | 'gas';
     ghsClass?: 'flame' | 'skull' | 'corrosive' | 'bio';
     substituteId?: string;
+    amount?: number; // In grams
+    molecularWeight?: number; // g/mol
     lca: {
         carbonFootprint: number; // kg CO2e/kg
         waterUsage: number; // L/kg
@@ -45,6 +47,7 @@ interface ReactionStore {
     // Actions
     addToMixture: (chem: Chemical) => void;
     removeFromMixture: (id: string) => void;
+    updateChemicalAmount: (id: string, amount: number) => void;
     clearMixture: () => void;
     setMixture: (mixture: Chemical[]) => void;
     processType: string;
@@ -78,11 +81,14 @@ export const useReactionStore = create<ReactionStore>((set) => ({
     hasProtocol: false,
     addToMixture: (chem) => set((state) => ({
         activeMixture: state.activeMixture.length < 10 && !state.activeMixture.find(c => c.id === chem.id)
-            ? [...state.activeMixture, chem]
+            ? [...state.activeMixture, { ...chem, amount: chem.amount || 100 }]
             : state.activeMixture
     })),
     removeFromMixture: (id) => set((state) => ({
         activeMixture: state.activeMixture.filter(c => c.id !== id)
+    })),
+    updateChemicalAmount: (id, amount) => set((state) => ({
+        activeMixture: state.activeMixture.map(c => c.id === id ? { ...c, amount } : c)
     })),
     clearMixture: () => set({ activeMixture: [] }),
     setMixture: (mixture) => set({ activeMixture: mixture }),

@@ -11,6 +11,7 @@ export const chemicalRegistry: Chemical[] = [
         physicalState: 'liquid',
         ghsClass: 'skull',
         substituteId: 'sol-cyrene',
+        molecularWeight: 84.93,
         lca: { carbonFootprint: 4.5, waterUsage: 120, wasteFactor: 1.5 },
         regulatory: { reachStatus: 'restricted', isAnnexXVII: true, isOsherCompliant: false }
     },
@@ -24,6 +25,7 @@ export const chemicalRegistry: Chemical[] = [
         physicalState: 'liquid',
         ghsClass: 'skull',
         substituteId: 'sol-cyrene',
+        molecularWeight: 92.14,
         lca: { carbonFootprint: 3.8, waterUsage: 90, wasteFactor: 1.2 },
         regulatory: { reachStatus: 'svhc', isAnnexXVII: true, isOsherCompliant: true }
     },
@@ -33,7 +35,9 @@ export const chemicalRegistry: Chemical[] = [
         name: 'Yoduro de Metilo',
         hazard: 'high',
         type: 'reagent',
+        role: 'reactant',
         ghsClass: 'skull',
+        molecularWeight: 141.94,
         lca: { carbonFootprint: 8.2, waterUsage: 250, wasteFactor: 2.5 },
         regulatory: { reachStatus: 'restricted', isAnnexXVII: false, isOsherCompliant: false }
     },
@@ -43,6 +47,8 @@ export const chemicalRegistry: Chemical[] = [
         name: 'Cyrene™',
         hazard: 'low',
         type: 'solvent',
+        role: 'solvent',
+        molecularWeight: 128.13,
         lca: { carbonFootprint: 0.8, waterUsage: 15, wasteFactor: 0.1 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -52,6 +58,8 @@ export const chemicalRegistry: Chemical[] = [
         name: 'D-Limoneno',
         hazard: 'low',
         type: 'solvent',
+        role: 'solvent',
+        molecularWeight: 136.24,
         lca: { carbonFootprint: 1.2, waterUsage: 30, wasteFactor: 0.2 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -61,6 +69,8 @@ export const chemicalRegistry: Chemical[] = [
         name: 'Etil Lactato',
         hazard: 'low',
         type: 'solvent',
+        role: 'solvent',
+        molecularWeight: 118.13,
         lca: { carbonFootprint: 1.1, waterUsage: 25, wasteFactor: 0.15 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -72,6 +82,7 @@ export const chemicalRegistry: Chemical[] = [
         type: 'catalyst',
         role: 'catalyst',
         physicalState: 'solid',
+        molecularWeight: 106.42,
         lca: { carbonFootprint: 15.0, waterUsage: 500, wasteFactor: 0.05 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -81,7 +92,9 @@ export const chemicalRegistry: Chemical[] = [
         name: 'Cromo (VI)',
         hazard: 'high',
         type: 'catalyst',
+        role: 'catalyst',
         ghsClass: 'bio',
+        molecularWeight: 51.99,
         lca: { carbonFootprint: 12.0, waterUsage: 450, wasteFactor: 0.8 },
         regulatory: { reachStatus: 'restricted', isAnnexXVII: true, isOsherCompliant: false }
     },
@@ -91,7 +104,9 @@ export const chemicalRegistry: Chemical[] = [
         name: 'Acido Maleico',
         hazard: 'medium',
         type: 'reagent',
+        role: 'reactant',
         ghsClass: 'corrosive',
+        molecularWeight: 116.07,
         lca: { carbonFootprint: 2.1, waterUsage: 60, wasteFactor: 0.4 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -101,7 +116,9 @@ export const chemicalRegistry: Chemical[] = [
         name: 'Acrilonitrilo',
         hazard: 'medium',
         type: 'reagent',
+        role: 'reactant',
         ghsClass: 'flame',
+        molecularWeight: 53.06,
         lca: { carbonFootprint: 4.2, waterUsage: 110, wasteFactor: 0.9 },
         regulatory: { reachStatus: 'svhc', isAnnexXVII: false, isOsherCompliant: false }
     },
@@ -114,6 +131,7 @@ export const chemicalRegistry: Chemical[] = [
         role: 'acid',
         physicalState: 'liquid',
         ghsClass: 'corrosive',
+        molecularWeight: 98.00,
         lca: { carbonFootprint: 2.5, waterUsage: 80, wasteFactor: 0.5 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -127,6 +145,7 @@ export const chemicalRegistry: Chemical[] = [
         physicalState: 'liquid',
         ghsClass: 'skull',
         substituteId: 'fert-nh4no3',
+        molecularWeight: 17.03,
         lca: { carbonFootprint: 3.2, waterUsage: 120, wasteFactor: 0.8 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: false }
     },
@@ -136,8 +155,9 @@ export const chemicalRegistry: Chemical[] = [
         name: 'Agua (Moderador)',
         hazard: 'low',
         type: 'reagent',
-        role: 'additive',
+        role: 'solvent',
         physicalState: 'liquid',
+        molecularWeight: 18.02,
         lca: { carbonFootprint: 0.1, waterUsage: 5, wasteFactor: 0.05 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -149,6 +169,7 @@ export const chemicalRegistry: Chemical[] = [
         type: 'reagent',
         role: 'reactant',
         physicalState: 'liquid',
+        molecularWeight: 80.04,
         lca: { carbonFootprint: 1.8, waterUsage: 40, wasteFactor: 0.2 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -161,6 +182,7 @@ export const chemicalRegistry: Chemical[] = [
         role: 'additive',
         physicalState: 'solid',
         ghsClass: 'corrosive',
+        molecularWeight: 94.20,
         lca: { carbonFootprint: 0.4, waterUsage: 1.5, wasteFactor: 0.1 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -170,7 +192,9 @@ export const chemicalRegistry: Chemical[] = [
         name: 'Sulfato de Zinc (Zinc-Mic)',
         hazard: 'medium',
         type: 'reagent',
+        role: 'additive',
         ghsClass: 'skull',
+        molecularWeight: 161.47,
         lca: { carbonFootprint: 0.8, waterUsage: 3.2, wasteFactor: 0.25 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     },
@@ -180,6 +204,8 @@ export const chemicalRegistry: Chemical[] = [
         name: 'Sulfato de Magnesio',
         hazard: 'low',
         type: 'reagent',
+        role: 'additive',
+        molecularWeight: 120.37,
         lca: { carbonFootprint: 0.3, waterUsage: 1.2, wasteFactor: 0.05 },
         regulatory: { reachStatus: 'compliant', isAnnexXVII: false, isOsherCompliant: true }
     }

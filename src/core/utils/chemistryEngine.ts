@@ -9,8 +9,36 @@ export interface AnalysisResult {
         waterUsage: number;
         wasteFactor: number;
         vocLevel: number;
-        estimatedROI?: number; // % improvement in profit margin
-        complianceRisk?: number; // 0-100
+        estimatedROI?: number;
+        complianceRisk?: number;
+        atomicEfficiency?: number; // AE%
+        massBalance?: {
+            totalReactants: number;
+            totalSolvents: number;
+            totalProduct: number;
+            totalWaste: number;
+        };
+        comparisonData?: {
+            traditional: {
+                waste: number;
+                energy: number;
+                emissions: number;
+            };
+            optimized: {
+                waste: number;
+                energy: number;
+                emissions: number;
+            };
+        };
+    };
+    productProfile?: {
+        name: string;
+        toxicity: 'low' | 'medium' | 'high';
+        biodegradability: string;
+        stability: string;
+        industrialUse: string;
+        functionalImprovement?: string;
+        compositionalDifference?: string;
     };
     principlesAnalysis: Array<{
         principleId: number;
@@ -31,6 +59,19 @@ export interface AnalysisResult {
         };
         tradeoff?: string;
     }>;
+    chemicalBreakdown?: Array<{
+        name: string;
+        id: string;
+        mass: number;
+        role: string;
+        ghsRisk: string;
+        reachStatus: string;
+    }>;
+    functionalFulfillment?: {
+        initialUse: string;
+        performanceScore: number;
+        diagnostic: string;
+    };
     regulatoryFlags?: Array<{
         id: string;
         severity: 'high' | 'medium';
@@ -48,7 +89,8 @@ export const analyzeChemistry = (
     ph: number = 7.0,
     rpm: number = 0,
     pressure: number = 1.0,
-    contextMode: 'standard' | 'audit' | 'executive' = 'standard'
+    contextMode: 'standard' | 'audit' | 'executive' = 'standard',
+    processType: string = 'standard'
 ): AnalysisResult => {
     if (mixture.length === 0) {
         return {
@@ -211,11 +253,79 @@ export const analyzeChemistry = (
 
     if (diagnostics.length === 0) diagnostics.push('Proceso operando bajo parámetros nominales.');
 
+    // Quantitative Calculations (Mass Balance & Atom Economy)
+    const reactantMass = mixture.filter(c => c.role === 'reactant' || c.role === 'acid' || c.role === 'base').reduce((acc, c) => acc + (c.amount || 0), 0);
+    const solventMass = mixture.filter(c => c.type === 'solvent').reduce((acc, c) => acc + (c.amount || 0), 0);
+
+    // Simulated Atomic Efficiency (AE%) based on role and molecular weight
+    const reactants = mixture.filter(c => c.role === 'reactant' || c.role === 'acid' || c.role === 'base');
+    const totalMWReactants = reactants.reduce((acc, c) => acc + (c.molecularWeight || 0), 0);
+
+    // Heuristic: Product MW is ~80% of total reactant MW in this simulation
+    const estimatedProductMW = totalMWReactants * 0.8;
+    const atomicEfficiency = totalMWReactants > 0 ? (estimatedProductMW / totalMWReactants) * 100 : 0;
+
+    // Mass Balance Result
+    const massBalance = {
+        totalReactants: reactantMass,
+        totalSolvents: solventMass,
+        totalProduct: reactantMass * (atomicEfficiency / 100),
+        totalWaste: (reactantMass * (1 - (atomicEfficiency / 100))) + (solventMass * 0.05) // 5% solvent loss
+    };
+
+    // Product Profile Generation v2 (Dynamic)
+    const productProfile: AnalysisResult['productProfile'] = {
+        name: processType === 'Síntesis NPK' ? 'Fertilizante NPK de Alta Bio-especificidad' :
+            processType === 'Recuperación Solventes' ? 'Solvente Técnico Regenerado' :
+                processType === 'Neutralización pH' ? 'Intermediario Químico Estabilizado' : 'Producto Químico Optimizado',
+        toxicity: highHazardCount > 0 ? 'medium' : 'low',
+        biodegradability: atomicEfficiency > 90 ? 'Alta (>95% en 28 días)' :
+            atomicEfficiency > 80 ? 'Buena (80-90%)' : 'Moderada (60-80%)',
+        stability: processType === 'Neutralización pH' ? (Math.abs(ph - 6.2) < 0.2 ? 'Máxima (Punto Isoeléctrico)' : 'Condicional') :
+            temperature > 80 ? 'Sensible al calor' : 'Estable',
+        industrialUse: processType === 'Síntesis NPK' ? 'Agroindustria / Fertirrigación Digital' :
+            processType === 'Recuperación Solventes' ? 'Limpieza Industrial / Síntesis' :
+                'Manufactura Química Fina',
+        functionalImprovement: processType === 'Síntesis NPK' ? 'Aumento del 15% en la biodisponibilidad de fósforo por quelación natural.' :
+            processType === 'Recuperación Solventes' ? 'Pureza técnica >99.2% con menor huella de carbono por litro.' :
+                'Estabilización iónica superior que reduce la reactividad secundaria.',
+        compositionalDifference: processType === 'Síntesis NPK' ? 'Eliminación completa de trazas de cloro y metales pesados.' :
+            processType === 'Recuperación Solventes' ? 'Sustitución de benceno/tolueno por ésteres ligeros biodegradables.' :
+                'Ajuste estequiométrico que reduce el exceso de bases residuales.'
+    };
+
+    // Comparison Data (Real vs Traditional Standard)
+    // Traditional Baseline (Industry Standard)
+    const traditionalEFactor = processType === 'Síntesis NPK' ? 2.5 :
+        processType === 'Recuperación Solventes' ? 0.8 : 1.5;
+    const traditionalEmissions = processType === 'Síntesis NPK' ? 0.85 : 0.05;
+
+    // BASELINE SYNC LOGIC: Check if simulation is in initial state
+    // Initial state: Temp=25, pH=7, RPM=0, Pressure=1 + specific chemicals for scenario
+    const isInitialState = temperature === 25 && ph === 7 && rpm === 0 && pressure === 1;
+
+    const comparisonData: AnalysisResult['metrics']['comparisonData'] = {
+        traditional: {
+            waste: traditionalEFactor,
+            emissions: traditionalEmissions,
+            energy: 100
+        },
+        optimized: {
+            waste: isInitialState ? traditionalEFactor : totalWaste,
+            emissions: isInitialState ? traditionalEmissions : (vocLevel / 100),
+            energy: isInitialState ? 100 : (100 - (calculatedScore / 10))
+        }
+    };
+
     // ROI & Compliance Calculations
-    const estimatedROIBase = 15; // 15% baseline efficiency gain
-    const wasteSaving = Math.max(0, (2 - totalWaste) * 5); // Save up to 10% on waste
-    const energySaving = energyScore / 10; // Save up to 10% on energy
-    const estimatedROI = estimatedROIBase + wasteSaving + energySaving;
+    let estimatedROIBase = 15;
+    if (processType === 'Recuperación Solventes') estimatedROIBase = 25; // Higher ROI for recycling
+    if (processType === 'Neutralización pH') estimatedROIBase = 10; // More about safety/quality
+
+    const wasteSaving = Math.max(0, (2 - totalWaste) * 5);
+    const energySaving = energyScore / 10;
+    const aeBonus = (atomicEfficiency - 50) / 2;
+    const estimatedROI = estimatedROIBase + wasteSaving + energySaving + Math.max(0, aeBonus);
 
     const complianceRisk = (highHazardCount * 20) + (restrictedCount * 40) + (pressure > 10 ? 30 : 0);
 
@@ -231,11 +341,55 @@ export const analyzeChemistry = (
         regulatoryFlags.push({ id: 'safety-1', severity: 'high', label: 'OSHA 1910.119: Proceso de Alta Presión' });
     }
 
+    // Granular Chemical Breakdown
+    const chemicalBreakdown = mixture.map(c => ({
+        name: c.name,
+        id: c.id,
+        mass: c.amount || 0,
+        role: c.role || 'additive',
+        ghsRisk: c.hazard.toUpperCase(),
+        reachStatus: c.regulatory.reachStatus
+    }));
+
+    // Functional Fulfillment & Stoichiometry Logic
+    // For NPK: Optimal is balanced nutrients (Reactants/Acid)
+    const reactantCount = mixture.filter(c => c.role === 'reactant' || c.role === 'acid').length;
+    let performanceScore = 100;
+    let stoicImbalance = 0;
+
+    if (isFertilizerScenario) {
+        // Ideal scenario: at least 2 key reactants (N and P/K source)
+        if (reactantCount < 2) performanceScore -= 30;
+
+        // Temperature effect on functionality (crystallization quality)
+        if (temperature < 40 || temperature > 75) performanceScore -= 20;
+
+        // pH effect on bioavailability
+        stoicImbalance = Math.abs(ph - 6.2);
+        performanceScore -= stoicImbalance * 40;
+    }
+
+    performanceScore = Math.max(0, Math.min(100, performanceScore));
+
+    const functionalFulfillment: AnalysisResult['functionalFulfillment'] = {
+        initialUse: processType === 'Síntesis NPK' ? 'Fertilización de Alta Demanda (Cereales/Legumbres)' :
+            processType === 'Recuperación Solventes' ? 'Limpieza de Precisión Electrónica' : 'Uso Industrial Estándar',
+        performanceScore: isInitialState ? 100 : performanceScore,
+        diagnostic: (isInitialState || performanceScore > 85) ? 'Cumplimiento óptimo de especificaciones técnicas.' :
+            performanceScore > 50 ? 'Rendimiento aceptable con ligeras desviaciones de pureza.' :
+                'Falla Crítica: El producto no alcanza los mínimos de estabilidad/bio-disponibilidad.'
+    };
+    // Sub-optimal Emissions (Stoichiometry leak)
+    // If ph is off, NH3 emissions spike realistically
+    if (hasAmmonia && stoicImbalance > 0.5) {
+        vocLevel += stoicImbalance * 35;
+    }
+
     // Context-tailored Justification
     if (contextMode === 'audit') {
-        justification = `AUDITORÍA: Riesgo de cumplimiento del ${complianceRisk}%. Se detectaron ${restrictedCount} sustancias restringidas y ${highHazardCount} de alto riesgo. Se recomienda revisión inmediata del Anexo XVII.`;
+        justification = `AUDITORÍA: Riesgo de cumplimiento del ${complianceRisk}%. Se detectaron ${restrictedCount} sustancias restringidas. Eficiencia atómica actual: ${atomicEfficiency.toFixed(1)}%.`;
     } else if (contextMode === 'executive') {
-        justification = `RESUMEN EJECUTIVO: El diseño actual proyecta un ROI del ${estimatedROI.toFixed(1)}% mediante reducción de residuos y eficiencia energética. El score de sostenibilidad de ${calculatedScore} posiciona el proyecto en el cuartil superior de la industria.`;
+        justification = `RESUMEN EJECUTIVO: El diseño proyecta un ROI del ${estimatedROI.toFixed(1)}% con una eficiencia atómica del ${atomicEfficiency.toFixed(1)}%. El balance de masa muestra una generación de residuos de ${massBalance.totalWaste.toFixed(1)}g por lote.`;
     }
 
     return {
@@ -248,11 +402,17 @@ export const analyzeChemistry = (
             wasteFactor: totalWaste,
             vocLevel,
             estimatedROI,
-            complianceRisk: Math.min(100, complianceRisk)
+            complianceRisk: Math.min(100, complianceRisk),
+            atomicEfficiency,
+            massBalance,
+            comparisonData
         },
+        productProfile,
         principlesAnalysis,
         diagnostics,
         optimizations,
-        regulatoryFlags
+        regulatoryFlags,
+        chemicalBreakdown,
+        functionalFulfillment
     };
 };

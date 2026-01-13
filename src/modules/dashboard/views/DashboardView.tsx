@@ -17,10 +17,13 @@ import { analyzeChemistry } from '@core/utils/chemistryEngine';
 
 function DashboardView() {
     const navigate = useNavigate();
-    const { activeMixture: mixture, processContext, setProcessContext } = useReactionStore();
+    const { activeMixture: mixture, reactionTemp, reactionPH, mixingSpeed, pressure, processType, processContext, setProcessContext } = useReactionStore();
 
-    // Deterministic Analysis base on current mixture
-    const analysis = useMemo(() => analyzeChemistry(mixture), [mixture]);
+    // Unified High-Fidelity Analysis
+    const analysis = useMemo(() =>
+        analyzeChemistry(mixture, reactionTemp, reactionPH, mixingSpeed, pressure, 'executive', processType),
+        [mixture, reactionTemp, reactionPH, mixingSpeed, pressure, processType]
+    );
 
     const [currentScore, setCurrentScore] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -75,6 +78,7 @@ function DashboardView() {
                     currentScore={currentScore}
                     isAnimating={isAnimating}
                     justification={analysis.justification}
+                    productName={analysis.productProfile?.name}
                 />
 
 

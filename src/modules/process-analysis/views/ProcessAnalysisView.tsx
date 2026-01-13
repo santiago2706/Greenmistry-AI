@@ -19,7 +19,8 @@ import {
     Flame,
     Droplets,
     AlertTriangle,
-    Layers
+    Layers,
+    ShieldCheck
 } from 'lucide-react';
 import { useNotificationStore } from '@core/stores/useNotificationStore';
 import { useReactionStore, Chemical } from '@core/stores/useReactionStore';
@@ -47,6 +48,7 @@ const ProcessAnalysisView: React.FC = () => {
         setIsConfirmed,
         addToMixture,
         removeFromMixture,
+        updateChemicalAmount,
         clearMixture,
         setProcessContext,
         processContext
@@ -61,8 +63,9 @@ const ProcessAnalysisView: React.FC = () => {
 
     // Contextual Analysis
     const analysis = useMemo(() =>
-        analyzeChemistry(mixture, reactionTemp, reactionPH, mixingSpeed, pressure, contextMode),
-        [mixture, reactionTemp, reactionPH, mixingSpeed, pressure, contextMode]);
+        analyzeChemistry(mixture, reactionTemp, reactionPH, mixingSpeed, pressure, contextMode, processType),
+        [mixture, reactionTemp, reactionPH, mixingSpeed, pressure, contextMode, processType]
+    );
 
     const toggleToMixture = (chem: Chemical) => {
         if (mixture.find(c => c.id === chem.id)) {
@@ -283,18 +286,20 @@ const ProcessAnalysisView: React.FC = () => {
                                     <Activity className="w-4 h-4 text-cyan-500 animate-pulse" />
                                     Matriz de Simulación
                                 </h3>
+                                {/* Process Type Selection (Moved from Absolute to here) */}
                                 {!isConfirmed && mixture.length > 0 && (
                                     <motion.div
-                                        initial={{ opacity: 0, y: -10 }}
+                                        initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="absolute top-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3"
+                                        className="mt-6 p-4 bg-slate-900/60 rounded-2xl border border-white/5 space-y-4"
                                     >
-                                        <div className="flex gap-2">
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Definir Objetivo del Proceso</p>
+                                        <div className="flex flex-wrap justify-center gap-2">
                                             {['Síntesis NPK', 'Recuperación Solventes', 'Neutralización pH'].map(type => (
                                                 <button
                                                     key={type}
                                                     onClick={() => setProcessType(type)}
-                                                    className={`px-3 py-1 text-[8px] font-black uppercase rounded-full border transition-all ${processType === type ? 'bg-cyan-500 text-black border-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]' : 'bg-black/40 text-slate-300 border-white/10 hover:border-white/30'}`}
+                                                    className={`px-3 py-1.5 text-[8px] font-black uppercase rounded-lg border transition-all ${processType === type ? 'bg-cyan-500 text-black border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)]' : 'bg-black/20 text-slate-400 border-white/5 hover:border-white/20'}`}
                                                 >
                                                     {type}
                                                 </button>
@@ -303,11 +308,11 @@ const ProcessAnalysisView: React.FC = () => {
                                         <button
                                             onClick={() => {
                                                 setIsConfirmed(true);
-                                                notify('Parámetros Confirmados', 'success', `Iniciando diagnóstico de ${processType}.`);
+                                                notify('Parámetros Confirmados', 'success', `Iniciando diagnóstico para ${processType}.`);
                                             }}
-                                            className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black text-[10px] font-black uppercase tracking-widest rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] flex items-center gap-2 hover:scale-110 transition-transform"
+                                            className="w-full py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                                         >
-                                            <Activity className="w-3 h-3" />
+                                            <Zap className="w-4 h-4" />
                                             Confirmar Proceso Industrial
                                         </button>
                                     </motion.div>
@@ -358,12 +363,24 @@ const ProcessAnalysisView: React.FC = () => {
                                                     className={`p-3 rounded-xl border flex flex-col gap-2 relative overflow-hidden transition-colors ${chem.hazard === 'high' ? 'bg-red-500/5 border-red-500/20' : 'bg-slate-800/40 border-white/5'}`}
                                                 >
                                                     <div className="flex justify-between items-center relative z-10">
-                                                        <span className="text-[10px] font-black text-slate-200 uppercase tracking-tight truncate max-w-[120px]">{chem.name}</span>
+                                                        <span className="text-[10px] font-black text-slate-200 uppercase tracking-tight truncate max-w-[100px]">{chem.name}</span>
                                                         <X
                                                             onClick={() => toggleToMixture(chem)}
                                                             className="w-3 h-3 text-slate-600 hover:text-red-400 cursor-pointer"
                                                         />
                                                     </div>
+
+                                                    <div className="flex items-center gap-2 relative z-10 bg-black/40 p-2 rounded-xl border border-white/10 shadow-inner group">
+                                                        <input
+                                                            type="number"
+                                                            value={chem.amount || 100}
+                                                            onChange={(e) => updateChemicalAmount(chem.id, parseFloat(e.target.value) || 0)}
+                                                            className="bg-transparent text-xs font-black font-mono text-emerald-400 w-full focus:outline-none placeholder:text-slate-700"
+                                                            min="0"
+                                                        />
+                                                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-tighter">g</span>
+                                                    </div>
+
                                                     {chem.hazard === 'high' && chem.substituteId && (
                                                         <button
                                                             onClick={() => swapInMixture(chem.id, chem.substituteId!)}
@@ -498,21 +515,75 @@ const ProcessAnalysisView: React.FC = () => {
                                                 exit={{ height: 0, opacity: 0 }}
                                                 className="overflow-hidden"
                                             >
-                                                <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
-                                                    {analysis.principlesAnalysis.slice(0, 4).map(p => {
-                                                        const gp = GREEN_CHEMISTRY_PRINCIPLES.find(x => x.id === p.principleId);
-                                                        return (
-                                                            <div key={p.principleId} className="space-y-1">
-                                                                <div className="flex justify-between text-[8px] font-bold uppercase tracking-tighter text-slate-300">
-                                                                    <span>{gp?.shortName}</span>
-                                                                    <span className={p.status === 'compliant' ? 'text-emerald-400' : 'text-red-400'}>{p.value}</span>
+                                                <div className="mt-4 pt-4 border-t border-white/5 space-y-4">
+                                                    {/* Product Technical Profile */}
+                                                    {analysis.productProfile && (
+                                                        <div className="bg-white/2 p-3 rounded-xl border border-white/5 space-y-2">
+                                                            <p className="text-[9px] font-black text-cyan-500 uppercase tracking-widest">Perfil Resultante: {analysis.productProfile.name}</p>
+                                                            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[10px]">
+                                                                <div className="flex justify-between border-b border-white/5 pb-1">
+                                                                    <span className="text-slate-500">Toxicidad:</span>
+                                                                    <span className={analysis.productProfile.toxicity === 'low' ? 'text-emerald-400' : 'text-amber-400'}>{analysis.productProfile.toxicity.toUpperCase()}</span>
                                                                 </div>
-                                                                <div className="h-0.5 bg-slate-800 rounded-full overflow-hidden">
-                                                                    <div className={`h-full ${p.status === 'compliant' ? 'bg-emerald-500' : 'bg-red-500'}`} style={{ width: '100%' }} />
+                                                                <div className="flex justify-between border-b border-white/5 pb-1">
+                                                                    <span className="text-slate-500">Estabilidad:</span>
+                                                                    <span className="text-slate-200">{analysis.productProfile.stability}</span>
+                                                                </div>
+                                                                <div className="flex justify-between border-b border-white/5 pb-1">
+                                                                    <span className="text-slate-500">Biodegrad.:</span>
+                                                                    <span className="text-emerald-400">{analysis.productProfile.biodegradability}</span>
+                                                                </div>
+                                                                <div className="flex justify-between border-b border-white/5 pb-1">
+                                                                    <span className="text-slate-500">Uso Industrial:</span>
+                                                                    <span className="text-slate-200">{analysis.productProfile.industrialUse}</span>
                                                                 </div>
                                                             </div>
-                                                        );
-                                                    })}
+                                                        </div>
+                                                    )}
+
+                                                    {/* Mass Balance Breakdown */}
+                                                    {analysis.metrics.massBalance && (
+                                                        <div className="bg-slate-900/50 p-3 rounded-xl border border-white/5">
+                                                            <p className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mb-2 text-center">Balance de Masa Estimado</p>
+                                                            <div className="flex items-center justify-between text-[10px] mb-4">
+                                                                <div className="text-center">
+                                                                    <span className="block text-slate-500 uppercase text-[8px]">Entrada</span>
+                                                                    <span className="text-emerald-400 font-mono">{(analysis.metrics.massBalance.totalReactants + analysis.metrics.massBalance.totalSolvents).toFixed(1)}g</span>
+                                                                </div>
+                                                                <ArrowRight className="w-3 h-3 text-slate-700" />
+                                                                <div className="text-center">
+                                                                    <span className="block text-slate-500 uppercase text-[8px]">Producto</span>
+                                                                    <span className="text-cyan-400 font-mono">{analysis.metrics.massBalance.totalProduct.toFixed(1)}g</span>
+                                                                </div>
+                                                                <ArrowRight className="w-3 h-3 text-slate-700" />
+                                                                <div className="text-center">
+                                                                    <span className="block text-slate-500 uppercase text-[8px]">Residuos</span>
+                                                                    <span className="text-red-400 font-mono">{analysis.metrics.massBalance.totalWaste.toFixed(1)}g</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20 text-center">
+                                                                <span className="text-[8px] text-emerald-500 uppercase font-black block">Eficiencia Atómica (AE%)</span>
+                                                                <span className="text-xs font-black text-emerald-400">{analysis.metrics.atomicEfficiency?.toFixed(1)}%</span>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        {analysis.principlesAnalysis.slice(0, 4).map(p => {
+                                                            const gp = GREEN_CHEMISTRY_PRINCIPLES.find(x => x.id === p.principleId);
+                                                            return (
+                                                                <div key={p.principleId} className="space-y-1">
+                                                                    <div className="flex justify-between text-[8px] font-bold uppercase tracking-tighter text-slate-300">
+                                                                        <span>{gp?.shortName}</span>
+                                                                        <span className={p.status === 'compliant' ? 'text-emerald-400' : 'text-red-400'}>{p.value}</span>
+                                                                    </div>
+                                                                    <div className="h-0.5 bg-slate-800 rounded-full overflow-hidden">
+                                                                        <div className={`h-full ${p.status === 'compliant' ? 'bg-emerald-500' : 'bg-red-500'}`} style={{ width: '100%' }} />
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
                                                 </div>
                                             </motion.div>
                                         )}
@@ -630,6 +701,24 @@ const ProcessAnalysisView: React.FC = () => {
                                     )}
                                 </div>
                             )}
+                            <div className="pt-8 border-t border-white/5 space-y-4">
+                                <button
+                                    onClick={() => clearMixture()}
+                                    className="w-full px-6 py-3 border border-slate-700 text-slate-500 rounded-xl text-[9px] font-black uppercase tracking-widest hover:text-white hover:border-white/20 transition-all flex items-center justify-center gap-2"
+                                >
+                                    Limpiar Mesa (Reset)
+                                </button>
+
+                                {mixture.some(c => c.id.startsWith('fert-')) && (
+                                    <button
+                                        onClick={() => setShowReport(true)}
+                                        className="w-full px-6 py-4 bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-500 hover:to-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-cyan-900/20 transition-all flex items-center justify-center gap-3 group active:scale-[0.98]"
+                                    >
+                                        <Zap className="w-4 h-4 fill-white" />
+                                        Generar Dictamen
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
 
@@ -695,55 +784,154 @@ const ProcessAnalysisView: React.FC = () => {
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             className="bg-[#111827] border border-white/10 rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
                         >
-                            <div className="p-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-cyan-900/20 to-transparent">
+                            <div className="p-8 border-b border-white/5 flex justify-between items-center bg-gradient-to-r from-cyan-900/30 to-slate-900/50 relative">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-cyan-500"></div>
                                 <div>
-                                    <h2 className="text-xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
-                                        <Zap className="w-6 h-6 text-cyan-400" />
-                                        Informe de Optimización G.C.C.
+                                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
+                                        <Zap className="w-7 h-7 text-cyan-400" />
+                                        Dictamen de Eficiencia de Proceso
                                     </h2>
-                                    <p className="text-[10px] text-slate-300 uppercase font-mono mt-1">Caso: Fertilizante Fosfatado Líquido (MAP/DAP)</p>
+                                    <p className="text-[10px] text-cyan-500 uppercase font-black tracking-widest mt-1 opacity-80">
+                                        Módulo de Análisis Industrial v2.5 • {processType}
+                                    </p>
                                 </div>
-                                <button onClick={() => setShowReport(false)} className="p-2 hover:bg-white/5 rounded-full transition-colors">
-                                    <X className="w-6 h-6 text-slate-300" />
+                                <button
+                                    onClick={() => setShowReport(false)}
+                                    className="p-3 bg-white/5 hover:bg-red-500/20 rounded-full transition-all group border border-white/5"
+                                >
+                                    <X className="w-6 h-6 text-slate-400 group-hover:text-red-400" />
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
-                                {/* Comparison Grid */}
+                            <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar">
+                                {/* EXECUTIVE SCORECARD - NEW CONSOLIDATED SECTION */}
+                                <div className="grid grid-cols-3 gap-6">
+                                    <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 flex flex-col items-center justify-center relative shadow-xl overflow-hidden group">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent"></div>
+                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Score de Química</span>
+                                        <div className="text-4xl font-black text-white group-hover:scale-110 transition-transform">{analysis.score}</div>
+                                        <div className="mt-2 text-[9px] font-bold text-cyan-400 bg-cyan-400/10 px-2 py-0.5 rounded">CONFORME</div>
+                                    </div>
+                                    <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 flex flex-col items-center justify-center relative shadow-xl overflow-hidden group">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent"></div>
+                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">ROI Proyectado</span>
+                                        <div className="text-4xl font-black text-white group-hover:scale-110 transition-transform">{analysis.metrics.estimatedROI?.toFixed(1)}%</div>
+                                        <div className="mt-2 text-[9px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">ALTO RENDIMIENTO</div>
+                                    </div>
+                                    <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 flex flex-col items-center justify-center relative shadow-xl overflow-hidden group">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent"></div>
+                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Riesgo REACH</span>
+                                        <div className="text-4xl font-black text-white group-hover:scale-110 transition-transform">{analysis.metrics.complianceRisk}%</div>
+                                        <div className={`mt-2 text-[9px] font-bold px-2 py-0.5 rounded ${analysis.metrics.complianceRisk! > 30 ? 'text-red-400 bg-red-400/10' : 'text-emerald-400 bg-emerald-400/10'}`}>
+                                            {analysis.metrics.complianceRisk! > 30 ? 'CRÍTICO' : 'BAJO'}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Comparison Grid (Dynamic) */}
                                 <div className="grid grid-cols-2 gap-8 text-sm">
                                     <div className="space-y-4">
-                                        <h3 className="text-[10px] font-black text-red-500 uppercase tracking-widest border-l-2 border-red-500 pl-3">Proceso Tradicional</h3>
-                                        <div className="bg-red-500/5 rounded-2xl p-4 border border-red-500/10 space-y-3 font-mono text-xs">
-                                            <div className="flex justify-between"><span>Temperatura:</span><span className="text-red-400 font-bold">85°C</span></div>
-                                            <div className="flex justify-between"><span>Rango de pH:</span><span className="text-red-400 font-bold">6.0 - 6.5</span></div>
-                                            <div className="flex justify-between"><span>Emisiones NH3:</span><span className="text-red-400 font-bold">ALTAS (Volatilización)</span></div>
-                                            <div className="flex justify-between"><span>E-Factor:</span><span className="text-red-400 font-bold">1.2 (Residuos Ácidos)</span></div>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <div className="text-[9px] text-slate-600 uppercase font-black">Cantidades (Batch 1000kg)</div>
-                                            <ul className="text-[11px] text-slate-300 space-y-1 bg-white/2 pb-4 pt-2">
-                                                <li>• Ácido Fosfórico (85%): ~550 kg</li>
-                                                <li>• Amoníaco Acuoso: ~145 kg</li>
-                                                <li>• Agua: ~305 kg</li>
-                                            </ul>
+                                        <h3 className="text-[10px] font-black text-red-500 uppercase tracking-widest border-l-2 border-red-500 pl-3">Matriz Convencional (Std-PDF)</h3>
+                                        <div className="bg-red-500/5 rounded-2xl p-4 border border-red-500/10 space-y-3 font-mono text-[11px]">
+                                            <div className="flex justify-between"><span>Emisiones NH3:</span><span className="text-red-400 font-bold">0.85 kg/ton</span></div>
+                                            <div className="flex justify-between"><span>Factor-E:</span><span className="text-red-400 font-bold">{analysis.metrics.comparisonData?.traditional.waste.toFixed(1)} f</span></div>
+                                            <div className="flex justify-between"><span>Uso Previsto:</span><span className="text-slate-500">{analysis.functionalFulfillment?.initialUse}</span></div>
                                         </div>
                                     </div>
 
                                     <div className="space-y-4">
-                                        <h3 className="text-[10px] font-black text-emerald-500 uppercase tracking-widest border-l-2 border-emerald-500 pl-3">Optimización Green Cockpit</h3>
-                                        <div className="bg-emerald-500/5 rounded-2xl p-4 border border-emerald-500/10 space-y-3 font-mono text-xs">
-                                            <div className="flex justify-between"><span>Temperatura:</span><span className="text-emerald-400 font-bold">{reactionTemp.toFixed(1)}°C</span></div>
-                                            <div className="flex justify-between"><span>Control pH:</span><span className="text-emerald-400 font-bold">{reactionPH.toFixed(1)} ± 0.1</span></div>
-                                            <div className="flex justify-between"><span>Emisiones NH3:</span><span className="text-emerald-400 font-bold">MINIMIZADAS (-40%)</span></div>
-                                            <div className="flex justify-between"><span>Consumo Energ.:</span><span className="text-emerald-400 font-bold">EFICIENTE (-25%)</span></div>
+                                        <h3 className="text-[10px] font-black text-emerald-500 uppercase tracking-widest border-l-2 border-emerald-500 pl-3">Nueva Formulación Green Cockpit (Live)</h3>
+                                        <div className="bg-emerald-500/5 rounded-2xl p-4 border border-emerald-500/10 space-y-3 font-mono text-[11px]">
+                                            <div className="flex justify-between"><span>Emisiones NH3:</span><span className="text-emerald-400 font-bold">{(analysis.metrics.vocLevel / 100).toFixed(2)} kg/ton</span></div>
+                                            <div className="flex justify-between"><span>Factor-E:</span><span className="text-emerald-400 font-bold">{analysis.metrics.comparisonData?.optimized.waste.toFixed(2)} f</span></div>
+                                            <div className="flex justify-between"><span>Desempeño:</span><span className="text-emerald-400 font-bold">{analysis.functionalFulfillment?.performanceScore.toFixed(0)}% Eficiencia</span></div>
                                         </div>
-                                        <div className="space-y-2">
-                                            <div className="text-[9px] text-slate-600 uppercase font-black">Cantidades Optimizadas</div>
-                                            <ul className="text-[11px] text-emerald-400/80 space-y-1 bg-white/2 pb-4 pt-2">
-                                                <li>• Ácido Fosfórico: 540 kg (Control de picos)</li>
-                                                <li>• Nitrato de Amonio (Sol): 140 kg (Sust. Parcial)</li>
-                                                <li>• Agua (Moderador): 320 kg (Control cinético)</li>
-                                            </ul>
+                                    </div>
+                                </div>
+
+                                {/* PER-CHEMICAL GRANULAR BREAKDOWN - NEW SECTION */}
+                                <div className="space-y-4">
+                                    <h3 className="text-[10px] font-black text-white uppercase tracking-[0.2em] flex items-center gap-2">
+                                        <Activity className="w-4 h-4 text-cyan-400" />
+                                        Inventario Crítico de Insumos
+                                    </h3>
+                                    <div className="bg-slate-900/40 rounded-3xl border border-white/5 overflow-hidden">
+                                        <table className="w-full text-left text-[11px]">
+                                            <thead>
+                                                <tr className="bg-white/5 text-[9px] font-black uppercase text-slate-500">
+                                                    <th className="p-4">Componente</th>
+                                                    <th className="p-4">Masa (g)</th>
+                                                    <th className="p-4">Rol Simulación</th>
+                                                    <th className="p-4">GHS Risk</th>
+                                                    <th className="p-4">REACH</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-white/5 font-mono">
+                                                {analysis.chemicalBreakdown?.map((chem, idx) => (
+                                                    <tr key={idx} className="hover:bg-white/2 transition-colors">
+                                                        <td className="p-4 text-slate-200">{chem.name}</td>
+                                                        <td className="p-4 text-slate-400">{chem.mass}</td>
+                                                        <td className="p-4 text-cyan-400/70">{chem.role.toUpperCase()}</td>
+                                                        <td className={`p-4 font-bold ${chem.ghsRisk === 'HIGH' ? 'text-red-400' : chem.ghsRisk === 'MEDIUM' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                                            {chem.ghsRisk}
+                                                        </td>
+                                                        <td className="p-4">
+                                                            <span className={`px-2 py-0.5 rounded text-[9px] ${chem.reachStatus === 'compliant' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                                                                {chem.reachStatus.toUpperCase()}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                {/* Product Comparison & Fulfillment Diagnostic */}
+                                <div className="bg-slate-800/20 rounded-3xl p-8 border border-white/5 space-y-6 relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-8 opacity-5">
+                                        <ShieldCheck className="w-32 h-32 text-emerald-500" />
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <div className="p-3 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+                                            <Zap className="w-6 h-6 text-emerald-400" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-lg font-black text-white">Cumplimiento de Uso Previsto</h3>
+                                            <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest">{analysis.functionalFulfillment?.initialUse}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-10">
+                                        <div className="space-y-4">
+                                            <div className="p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/10 space-y-3">
+                                                <div className="flex justify-between items-end">
+                                                    <span className="text-[10px] font-black text-emerald-500 uppercase">Eficiencia Funcional</span>
+                                                    <span className="text-2xl font-black text-white">{analysis.functionalFulfillment?.performanceScore.toFixed(0)}%</span>
+                                                </div>
+                                                <div className="h-2 bg-slate-900 rounded-full overflow-hidden">
+                                                    <motion.div
+                                                        initial={{ width: 0 }}
+                                                        animate={{ width: `${analysis.functionalFulfillment?.performanceScore}%` }}
+                                                        className="h-full bg-emerald-500"
+                                                    />
+                                                </div>
+                                                <p className="text-[11px] text-slate-400 leading-relaxed italic">
+                                                    "{analysis.functionalFulfillment?.diagnostic}"
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-4">
+                                            <div className="p-4 bg-white/5 rounded-2xl border border-white/5 space-y-4">
+                                                <div>
+                                                    <span className="text-[10px] font-black text-slate-500 uppercase block mb-1">Diferencia de Composición</span>
+                                                    <p className="text-[11px] text-slate-200 leading-tight">{analysis.productProfile?.compositionalDifference}</p>
+                                                </div>
+                                                <div>
+                                                    <span className="text-[10px] font-black text-slate-500 uppercase block mb-1">Mejora Funcional Lograda</span>
+                                                    <p className="text-[11px] text-slate-200 leading-tight">{analysis.productProfile?.functionalImprovement}</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -762,20 +950,24 @@ const ProcessAnalysisView: React.FC = () => {
                                         <tbody className="divide-y divide-white/5 font-mono">
                                             <tr>
                                                 <td className="p-4 text-slate-300">Emisiones NH3 (Fugitivas)</td>
-                                                <td className="p-4 text-red-400">0.85 kg/ton</td>
-                                                <td className="p-4 text-emerald-400">0.12 kg/ton</td>
-                                                <td className="p-4 text-cyan-400">+85.8%</td>
+                                                <td className="p-4 text-red-400">{analysis.metrics.comparisonData?.traditional.emissions.toFixed(2)} kg/ton</td>
+                                                <td className="p-4 text-emerald-400">{(analysis.metrics.vocLevel / 100).toFixed(2)} kg/ton</td>
+                                                <td className="p-4 text-cyan-400">
+                                                    +{(((analysis.metrics.comparisonData?.traditional.emissions || 1) - (analysis.metrics.vocLevel / 100)) / (analysis.metrics.comparisonData?.traditional.emissions || 1) * 100).toFixed(1)}%
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td className="p-4 text-slate-300">Factor-E (Residuos)</td>
-                                                <td className="p-4 text-red-400">1.25 f</td>
-                                                <td className="p-4 text-emerald-400">0.45 f</td>
-                                                <td className="p-4 text-cyan-400">+64.0%</td>
+                                                <td className="p-4 text-red-400">{analysis.metrics.comparisonData?.traditional.waste.toFixed(2)} f</td>
+                                                <td className="p-4 text-emerald-400">{analysis.metrics.wasteFactor.toFixed(2)} f</td>
+                                                <td className="p-4 text-cyan-400">
+                                                    +{(((analysis.metrics.comparisonData?.traditional.waste || 1) - analysis.metrics.wasteFactor) / (analysis.metrics.comparisonData?.traditional.waste || 1) * 100).toFixed(1)}%
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td className="p-4 text-slate-300">Riesgo Regulatorio</td>
-                                                <td className="p-4 text-amber-500">MEDIO</td>
-                                                <td className="p-4 text-emerald-400">BAJO</td>
+                                                <td className="p-4 text-amber-500">{analysis.metrics.complianceRisk! > 50 ? 'ALTO' : analysis.metrics.complianceRisk! > 20 ? 'MEDIO' : 'BAJO'}</td>
+                                                <td className="p-4 text-emerald-400">{analysis.metrics.complianceRisk! < 20 ? 'BAJO' : 'CONTROLADO'}</td>
                                                 <td className="p-4 text-cyan-400">REDUCIDO</td>
                                             </tr>
                                         </tbody>
@@ -788,19 +980,35 @@ const ProcessAnalysisView: React.FC = () => {
                                         <div className="space-y-1">
                                             <p className="text-[10px] font-black text-cyan-400 uppercase">Resumen Ejecutivo</p>
                                             <p className="text-xs text-slate-300 leading-relaxed italic">
-                                                "Al operar a 58°C con un pH controlado de 6.2, el proceso de neutralización es intrínsecamente más seguro (Principio 12) y eficiente (Principio 6). El uso de agua como moderador térmico y la sustitución parcial por nitrato de amonio reduce drásticamente las emisiones de vapores tóxicos, alineando la planta con los más altos estándares ambientales."
+                                                "{analysis.justification}"
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="p-6 border-t border-white/5 bg-slate-900/50 flex justify-end">
+                            <div className="p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={() => navigate('/dashboard')}
+                                        className="px-6 py-3 border border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
+                                    >
+                                        <ArrowRight className="w-4 h-4 rotate-180" />
+                                        Dashboard Ejecutivo
+                                    </button>
+                                    <button
+                                        onClick={() => navigate('/regulatory')}
+                                        className="px-6 py-3 border border-cyan-500/20 text-cyan-500 hover:bg-cyan-500/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
+                                    >
+                                        <FileText className="w-4 h-4" />
+                                        Auditoría Regulatoria
+                                    </button>
+                                </div>
                                 <button
                                     onClick={() => setShowReport(false)}
-                                    className="px-8 py-3 bg-gradient-to-r from-cyan-600 to-emerald-600 rounded-xl text-[10px] font-black uppercase tracking-widest text-white hover:scale-105 transition-all"
+                                    className="px-12 py-4 bg-gradient-to-r from-cyan-600 to-emerald-600 rounded-2xl text-xs font-black uppercase tracking-widest text-white hover:scale-105 transition-all shadow-xl shadow-cyan-900/20"
                                 >
-                                    Cerrar y Volver al Laboratorio
+                                    Cerrar Dictamen y Volver al Lab
                                 </button>
                             </div>
                         </motion.div>
@@ -808,45 +1016,7 @@ const ProcessAnalysisView: React.FC = () => {
                 )}
             </AnimatePresence>
 
-            {/* TACTICAL ACTION BAR */}
-            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40 w-full max-w-5xl px-6">
-                <motion.div
-                    initial={{ y: 100 }}
-                    animate={{ y: 0 }}
-                    className="bg-slate-900/80 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 flex items-center justify-between shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden"
-                >
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent"></div>
-
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="relative z-10 px-6 py-3 text-xs font-black text-slate-300 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-3 group"
-                    >
-                        <ArrowRight className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
-                        Cockpit
-                    </button>
-
-                    <div className="flex items-center gap-4 relative z-10">
-                        <button
-                            onClick={() => clearMixture()}
-                            className="px-6 py-3 border border-slate-700 text-slate-300 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:text-white hover:border-white/20 transition-all"
-                        >
-                            Reset Bench
-                        </button>
-
-                        {mixture.some(c => c.id.startsWith('fert-')) && (
-                            <button
-                                onClick={() => setShowReport(true)}
-                                className="px-10 py-5 bg-[#0891b2] hover:bg-[#06b6d4] text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(8,145,178,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.5)] transition-all flex items-center gap-4 group active:scale-95"
-                            >
-                                <Zap className="w-5 h-5 fill-white animate-pulse" />
-                                Generar Informe de Optimización
-                            </button>
-                        )}
-                    </div>
-                </motion.div>
-            </div>
-
-            <div className="h-48"></div> {/* Increased spacer for fixed footer */}
+            <div className="h-24"></div>
         </div>
     );
 };
