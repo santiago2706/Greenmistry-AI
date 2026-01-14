@@ -20,7 +20,8 @@ import {
     Droplets,
     AlertTriangle,
     Layers,
-    ShieldCheck
+    ShieldCheck,
+    Plus
 } from 'lucide-react';
 import { useNotificationStore } from '@core/stores/useNotificationStore';
 import { useReactionStore, Chemical } from '@core/stores/useReactionStore';
@@ -60,6 +61,7 @@ const ProcessAnalysisView: React.FC = () => {
     const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
     const [showReport, setShowReport] = useState(false);
     const [contextMode, setContextMode] = useState<'standard' | 'audit' | 'executive'>('standard');
+    const [selectedChemical, setSelectedChemical] = useState<Chemical | null>(null);
 
     // Contextual Analysis
     const analysis = useMemo(() =>
@@ -151,16 +153,19 @@ const ProcessAnalysisView: React.FC = () => {
                             {chemicalRegistry.map((chem) => (
                                 <button
                                     key={chem.id}
-                                    onClick={() => toggleToMixture(chem)}
+                                    onClick={() => setSelectedChemical(chem)}
+                                    onDoubleClick={() => toggleToMixture(chem)}
                                     className={`w-full text-left p-3 rounded-xl border transition-all duration-300 group relative
-                                        ${mixture.find(c => c.id === chem.id)
-                                            ? 'border-cyan-500 bg-cyan-500/5 shadow-inner'
-                                            : 'border-white/5 bg-[#0F172A] hover:border-cyan-400/30'
+                                        ${selectedChemical?.id === chem.id
+                                            ? 'border-cyan-500 bg-cyan-500/10 shadow-lg'
+                                            : mixture.find(c => c.id === chem.id)
+                                                ? 'border-emerald-500/50 bg-emerald-500/5'
+                                                : 'border-white/5 bg-[#0F172A] hover:border-cyan-400/30'
                                         }`}
                                 >
                                     <div className="flex justify-between items-center relative z-10">
                                         <div className="flex flex-col">
-                                            <span className={`text-xs font-bold uppercase tracking-tight ${mixture.find(c => c.id === chem.id) ? 'text-cyan-400' : 'text-slate-300'}`}>
+                                            <span className={`text-xs font-bold uppercase tracking-tight ${selectedChemical?.id === chem.id ? 'text-cyan-400' : mixture.find(c => c.id === chem.id) ? 'text-emerald-400' : 'text-slate-300'}`}>
                                                 {chem.name}
                                             </span>
                                             <span className="text-[10px] text-slate-300 uppercase font-mono">{chem.type}</span>
@@ -170,6 +175,119 @@ const ProcessAnalysisView: React.FC = () => {
                                 </button>
                             ))}
                         </div>
+
+                        {/* Chemical Detail Panel */}
+                        <AnimatePresence>
+                            {selectedChemical && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="mt-4 pt-4 border-t border-white/10 overflow-hidden"
+                                >
+                                    <div className="bg-slate-900/60 rounded-xl p-4 space-y-3 border border-cyan-500/20">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <h4 className="text-sm font-black text-cyan-400 uppercase">{selectedChemical.name}</h4>
+                                                <p className="text-[9px] text-slate-400 font-mono">CAS: {selectedChemical.cas}</p>
+                                            </div>
+                                            <button
+                                                onClick={() => setSelectedChemical(null)}
+                                                className="p-1 hover:bg-white/5 rounded transition-colors"
+                                            >
+                                                <X className="w-3 h-3 text-slate-500 hover:text-slate-300" />
+                                            </button>
+                                        </div>
+
+                                        <div className="space-y-2 text-[10px]">
+                                            <div className="flex justify-between border-b border-white/5 pb-1">
+                                                <span className="text-slate-500">Masa Molecular:</span>
+                                                <span className="text-slate-200 font-mono">{selectedChemical.molecularWeight?.toFixed(2) || 'N/A'} g/mol</span>
+                                            </div>
+                                            <div className="flex justify-between border-b border-white/5 pb-1">
+                                                <span className="text-slate-500">Estado Físico:</span>
+                                                <span className="text-slate-200 uppercase">{selectedChemical.physicalState || 'N/A'}</span>
+                                            </div>
+                                            <div className="flex justify-between border-b border-white/5 pb-1">
+                                                <span className="text-slate-500">Peligro GHS:</span>
+                                                <div className="flex items-center gap-1">
+                                                    {getGHSIcon(selectedChemical.ghsClass)}
+                                                    <span className={`font-bold uppercase ${selectedChemical.hazard === 'high' ? 'text-red-400' : selectedChemical.hazard === 'medium' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                                        {selectedChemical.hazard}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="pt-2 border-t border-white/5">
+                                            <p className="text-[9px] text-slate-500 uppercase font-black mb-2">Estado Regulatorio</p>
+                                            <div className="space-y-1.5 text-[9px]">
+                                                <div className="flex justify-between">
+                                                    <span className="text-slate-400">REACH:</span>
+                                                    <span className={`px-2 py-0.5 rounded font-bold ${selectedChemical.regulatory.reachStatus === 'compliant' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'}`}>
+                                                        {selectedChemical.regulatory.reachStatus.toUpperCase()}
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-slate-400">Annex XVII:</span>
+                                                    <span className={selectedChemical.regulatory.isAnnexXVII ? 'text-red-400' : 'text-emerald-400'}>
+                                                        {selectedChemical.regulatory.isAnnexXVII ? 'SÍ' : 'NO'}
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-slate-400">OSHER:</span>
+                                                    <span className={selectedChemical.regulatory.isOsherCompliant ? 'text-emerald-400' : 'text-red-400'}>
+                                                        {selectedChemical.regulatory.isOsherCompliant ? 'Compliant' : 'Non-Compliant'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="pt-2 border-t border-white/5">
+                                            <p className="text-[9px] text-slate-500 uppercase font-black mb-2">Análisis de Ciclo de Vida</p>
+                                            <div className="space-y-1.5 text-[9px]">
+                                                <div className="flex justify-between">
+                                                    <span className="text-slate-400">Huella de Carbono:</span>
+                                                    <span className="text-slate-200 font-mono">{selectedChemical.lca.carbonFootprint.toFixed(1)} kg CO₂e/kg</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-slate-400">Uso de Agua:</span>
+                                                    <span className="text-slate-200 font-mono">{selectedChemical.lca.waterUsage.toFixed(0)} L/kg</span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-slate-400">Factor de Residuos:</span>
+                                                    <span className="text-slate-200 font-mono">{selectedChemical.lca.wasteFactor.toFixed(2)}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={() => {
+                                                toggleToMixture(selectedChemical);
+                                                setSelectedChemical(null);
+                                            }}
+                                            disabled={mixture.length >= 10}
+                                            className={`w-full py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${mixture.find(c => c.id === selectedChemical.id)
+                                                ? 'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20'
+                                                : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 hover:bg-cyan-500/20'
+                                                }`}
+                                        >
+                                            {mixture.find(c => c.id === selectedChemical.id) ? (
+                                                <>
+                                                    <X className="w-3 h-3" />
+                                                    Remover de Mezcla
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Plus className="w-3 h-3" />
+                                                    Añadir a Mezcla
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </aside>
 
@@ -987,23 +1105,7 @@ const ProcessAnalysisView: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="p-8 border-t border-white/5 bg-slate-900/50 flex justify-between items-center">
-                                <div className="flex gap-4">
-                                    <button
-                                        onClick={() => navigate('/dashboard')}
-                                        className="px-6 py-3 border border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
-                                    >
-                                        <ArrowRight className="w-4 h-4 rotate-180" />
-                                        Dashboard Ejecutivo
-                                    </button>
-                                    <button
-                                        onClick={() => navigate('/regulatory')}
-                                        className="px-6 py-3 border border-cyan-500/20 text-cyan-500 hover:bg-cyan-500/10 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
-                                    >
-                                        <FileText className="w-4 h-4" />
-                                        Auditoría Regulatoria
-                                    </button>
-                                </div>
+                            <div className="p-8 border-t border-white/5 bg-slate-900/50 flex justify-end items-center">
                                 <button
                                     onClick={() => setShowReport(false)}
                                     className="px-12 py-4 bg-gradient-to-r from-cyan-600 to-emerald-600 rounded-2xl text-xs font-black uppercase tracking-widest text-white hover:scale-105 transition-all shadow-xl shadow-cyan-900/20"
